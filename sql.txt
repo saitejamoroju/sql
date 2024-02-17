@@ -1,0 +1,280 @@
+create database org;
+show databases;
+use org;
+create table worker(
+workerid int not null primary key auto_increment,
+firstname char(25),
+lastname char(25),
+salary int(15),
+joindate datetime,
+department char(25)
+);
+insert into worker 
+(workerid,firstname,lastname,salary,joindate,department)values
+ (1,'a','aa',10000,'14-02-20 09.00.00', 'hr'),
+ (2,'b','bb',2000,'14-01-23 10.00.00', 'tl'),
+ (3,'c','cc',3000,'12-10-24 2.00.00','worker');
+ 
+ insert into worker 
+(workerid,firstname,lastname,salary,joindate,department)values
+  (5,'e','ee',3000,'17-10-24 4.00.00','tl');
+ 
+ select * from worker;
+  
+ select * from worker where salary between 3000 and 10000;
+ 
+ 
+ select * from worker where department ='hr' or department='tl';
+						-- or
+ select * from worker where department in ('hr','tl','worker');
+ 
+ 
+ 
+ --  select the name if it has particular letter in it
+ select * from worker where department like '%r%';
+ 
+-- here the r is selected for 2nd letter 
+select * from worker where department like '%_r%';
+
+
+select * from worker order by salary ; -- this is ascending order salary
+select * from worker order by salary desc ; -- this is descending order salary
+
+ -- distinct data
+select distinct(department) from worker;
+
+--  group by
+select department from worker group by department;
+
+-- avg salary
+select department ,avg(salary) from worker group by department;
+
+-- group by having 
+ select department ,count(department) from worker group by 
+ department having count(department)>1;
+ 
+ 
+ create table account(
+ id int primary key,
+ name varchar(255) unique,
+ balance int,
+ constraint acc_balance check(balance>1000)
+ );
+ insert into account(id,name,balance) values(1,'a',10000);
+ select *from account;
+ insert into account(id,name,balance) values(2,'a',20000); -- show error duplicate name not allowed
+  insert into account(id,name,balance) values(2,'b',200); -- show error balance lesser not allowed
+ drop table account;
+ 
+  create table account(
+ id int primary key,
+ name varchar(255) unique,
+ balance int not null default 0
+ );
+ insert into account(id,name) values(1,'a');
+ select *from account;
+ insert into account(id,name,balance) values(2,'a',20000); -- show error duplicate name not allowed
+  insert into account(id,name,balance) values(2,'b',200);
+ 
+ -- add new col
+ alter table account add intrest float not null default 0;
+  select *from accountdetails;
+  
+  -- modify 
+  alter table account modify intrest double not null default 0;
+  
+  -- rename col
+  alter table account change column intrest savingint float not null default 0;
+  
+  -- drop column 
+  alter table account drop column savingint;
+  
+  -- rename table
+  alter table account rename to accountdetails;
+  
+  create table customer(
+  id integer primary key,
+  cname varchar(25),
+  address varchar(25),
+  gender char(2),
+  city varchar(25),
+  pincode integer);
+  
+  
+  insert into customer (id,cname,address,gender,city,pincode) values (1,'a','nlg','m','hyd',500),
+	 (2,'b','nlgg','m','hydd',5000),
+     (3,'c','nkl','f','Banglo',50000),
+     (4,'d','mlg','m','chenn',50070);
+  
+ 
+
+insert into customer(id,cname) values (10,'teja');
+  
+ -- update;
+ update customer set address='coim',gender='f' where id=2;
+ 
+  
+ update customer set pincode=10000;
+ 
+ 
+ -- delete
+ delete from customer ;
+ 
+ select * from customer;
+ 
+ -- replace 
+ replace into customer (id,cname,city)
+ values (1233,'saitee','colony');
+     
+create table project(
+id integer,
+empid integer,
+name varchar(255),
+startdate date,
+clientid integer
+);
+insert into project (id,empid,name,startdate,clientid) values
+(1,1,'a','2021-01-21',3),
+(2,2,'b','2021-04-12',1),
+(3,3,'c','2021-01-16',5),
+(4,3,'d','2021-9-21',2),
+(5,5,'e','201-05-01',4);
+
+select * from project;
+
+create table employee(
+id int,
+fname varchar(255),
+lname varchar(255),
+age integer,
+emailid varchar(255),
+phoneno integer,
+city varchar(255)
+);
+insert into employee(id,fname,lname,age,emailid,phoneno,city) values
+(1,'aman','proto',32,'aman@gmail.com',9898,'delhi'),
+(2,'yagya','narayan',44,'yagya@gamil.com',5545,'palam'),
+(3,'rahul','bd',22,'rahul@gmail.com',564,'kolkata'),
+(4,'jatin','hermit',31,'jatin@gmail.com',666,'raipur'),
+(5,'pk','pandey',21,'pk@gmail.com',787,'jaipur');
+
+select * from employee; 
+
+create table client(
+id integer,
+fname varchar(255),
+lname varchar(255),
+age integer,
+emailid varchar(255),
+phoneNo integer,
+city varchar(255),
+empid integer
+);
+
+insert into client (id,fname,lname,age,emailid,phoneNo,city,empid) values
+(1,'mac','Rooger',47,'mac@gmail.com',333,'kolkata',3),
+(2,'max','Poirier',27,'max@gmail.com',222,'kolkata',3),
+(3,'peter','jain',24,'peter@gmail.com',111,'delhi',1),
+(4,'sushant','Aggarwal',23,'sush@gmail.com',34343,'hyderabad',5),
+(5,'pratap','sing',24,'pra@gmail.com',5465,'mumbai',3);
+
+
+select * from client;
+
+
+--  inner join
+select * from employee as e 
+inner join project as p on e.id=p.empid;
+
+select e.id,e.emailid,e.phoneno,e.city,c.fname,c.lname,e.city from employee as e 
+inner join client as c on e.id=c.empid where e.city='jaipur' and c.city='hyderabad';
+
+-- left join 
+select * from employee as e
+left join project as p on e.id=p.empid;
+
+-- left join  without join keyword
+select * from employee as e,
+ project as p where e.id=p.empid;
+
+
+   
+-- right join
+select * from employee as e
+right join project as p on e.id=p.empid;
+
+
+-- cross join
+select * from employee as e
+cross join project as p;
+
+
+create table dept1(
+empid integer,
+name varchar(255),
+role varchar(255)
+);
+
+insert into dept1(empid,name,role) values
+(1,'a','engineer'),
+(2,'b','salesman'),
+(3,'c','manager'),
+(4,'d','salesaman'),
+(5,'e','engineer');
+
+create table dept2(
+empid integer,
+name varchar(255),
+role varchar(255)
+);
+insert into dept2(empid,name,role) values
+(3,'c','manager'),
+(6,'f','marketing'),
+(7,'g','salesman');
+ 
+ -- union 
+ select * from dept1 where role='manager'
+ union 
+ select * from dept2 where role ='manager';
+ 
+ 
+ -- intersect
+ select * from dept1 inner join dept2 using (empid);
+ 
+ 
+ -- minus (dept1-dept2)
+ select dept1.* from dept1 left join dept2 using (empid) where dept2.empid is null;
+ 
+ 
+ 
+ -- sub queries
+ select * from employee where age in (select age from employee where age>30);
+ 
+ 
+ select * from employee where id in (
+ select empid from project group by empid having count(empid)>1
+);
+
+
+-- single value subquery
+select * from employee where age>(select avg(age) from employee); -- avg is 30
+ -- from clause subquery
+ select * from employee;
+ select max(age) from (select * from employee where fname like '%a%') as temp;
+ 
+ -- find 3rd oldest employee
+ select * from employee e1
+ where 3=(
+ select count(e2.age) from employee e2 where e2.age>=e1.age);
+
+
+-- view
+select * from employee;
+
+create view custom_view as select fname,age from employee;
+
+select * from custom_view;
+
+
+-- drop 
+drop view if exists custom_view;
